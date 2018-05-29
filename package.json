@@ -4,7 +4,7 @@
   "description": "Play videos on Dropbox folder as a playlist",
   "main": "dest/index.js",
   "scripts": {
-    "test": "jest"
+    "test": "tslint ./src/**/*.ts && jest"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,23 @@
   "bugs": {
     "url": "https://github.com/otiai10/dropbox-playlist/issues"
   },
-  "homepage": "https://github.com/otiai10/dropbox-playlist#readme"
+  "homepage": "https://github.com/otiai10/dropbox-playlist#readme",
+  "devDependencies": {
+    "@types/jest": "^22.2.3",
+    "jest": "^23.0.1",
+    "ts-jest": "^22.4.6",
+    "tslint": "^5.10.0",
+    "typescript": "^2.8.3"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "tests/.*-test\\.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "setupTestFrameworkScriptFile": "./tests/setup.ts"
+  }
 }
