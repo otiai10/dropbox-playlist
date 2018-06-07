@@ -4,6 +4,7 @@
   "description": "Play videos on Dropbox folder as a playlist",
   "main": "dest/index.js",
   "scripts": {
+    "start": "webpack --watch --progress",
     "test": "tslint ./src/**/*.ts && jest"
   },
   "repository": {
@@ -25,8 +26,11 @@
     "@types/jest": "^22.2.3",
     "jest": "^23.0.1",
     "ts-jest": "^22.4.6",
+    "ts-loader": "^4.3.1",
     "tslint": "^5.10.0",
-    "typescript": "^2.8.3"
+    "typescript": "^2.8.3",
+    "webpack": "^4.11.1",
+    "webpack-cli": "^3.0.3"
   },
   "jest": {
     "transform": {
@@ -38,5 +42,8 @@
       "js"
     ],
     "setupTestFrameworkScriptFile": "./tests/setup.ts"
+  },
+  "dependencies": {
+    "chomex": "^1.0.14"
   }
 }

@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+  "version": "0.0.1",
+  "name": "__MSG_extension_name__",
+  "description": "__MSG_extension_description__",
+  "default_locale": "ja",
+  "background": {
+    "scripts": ["dest/js/background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.dropbox.com/*/*"],
+      "js": [
+        "dest/js/content.js"
+      ]
+    }
+  ],
+  "author": "otiai10"
+}

@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
-        "lib": ["ES5", "ES2015"],
-        "target": "ES3",
+        "lib": ["es5", "es2015", "dom"],
+        "target": "es5",
         "module": "commonjs",
         "outDir": "dest",
         "sourceMap": false,
@@ -9,7 +9,7 @@
     },
     "files": [
         "src/background.ts",
-        "src/content_script.ts"
+        "src/content.ts"
     ],
     "exclude": [
         "node_modules"
