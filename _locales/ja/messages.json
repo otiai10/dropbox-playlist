@@ -4,5 +4,8 @@
   },
   "extension_description": {
     "message": "Dropboxのフォルダにビデオ（mp4など）があった場合に、連続再生できるようにページをカスタマイズするChrome拡張です"
+  },
+  "btn_create_playlist": {
+    "message": "プレイリスト作成 & 登録"
   }
 }

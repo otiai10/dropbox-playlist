@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/otiai10/dropbox-playnext-button#readme",
   "devDependencies": {
+    "@types/chrome": "0.0.69",
     "@types/jest": "^22.2.3",
     "jest": "^23.0.1",
     "ts-jest": "^22.4.6",

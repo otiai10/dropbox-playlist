@@ -1,6 +1,13 @@
 import * as chomex from "chomex";
 
-const r = new chomex.Router();
+import {
+  OnTabUpdated,
+  RegisterPlaylist,
+} from "./controllers";
 
-/* tslint:disable no-console */
-console.log(r);
+const router = new chomex.Router();
+router.on("/playlist/register", RegisterPlaylist);
+
+chrome.runtime.onMessage.addListener(router.listener());
+
+chrome.tabs.onUpdated.addListener(OnTabUpdated);
