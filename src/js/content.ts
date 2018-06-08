@@ -97,7 +97,6 @@ import * as chomex from "chomex";
   };
 
   const router = new chomex.Router();
-  router.on("/ping", () => ({url: location.href}));
   router.on("/control/show", msg => {
     const {prev, next, autoplay} = msg;
     upsertControlBar(prev, next, autoplay);

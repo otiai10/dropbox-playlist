@@ -42,20 +42,16 @@ export function RegisterPlaylist(msg) {
   };
 }
 
-export function OnTabUpdated(id: number, info: chrome.tabs.TabChangeInfo /* , tab: chrome.tabs.Tab */) {
+export function OnTabUpdated(id: number, info: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab) {
   if (info.status !== "complete") return;
-  // FIXME: the "tab" doesn't have URL, unnable to know if it's dropbox ;(
+  const url = new URL(tab.url);
+  const playlist = Playlist.find<Playlist>(url.host + url.pathname);
+  if (!playlist) return;
+  const preview = url.searchParams.get("preview");
+  if (!preview) return;
+  const index = playlist.previews.indexOf(preview);
+  const prev = playlist.previews[index - 1];
+  const next = playlist.previews[index + 1];
   const client = chomex.Client.for(chrome.tabs, id);
-  client.message("/ping").then(res => {
-    const url = new URL(res.data.url);
-    const preview = url.searchParams.get("preview");
-    if (!preview) return;
-    const plid = url.host + url.pathname;
-    const playlist = Playlist.find<Playlist>(plid);
-    if (!playlist) return;
-    const index = playlist.previews.indexOf(preview);
-    const prev = playlist.previews[index - 1];
-    const next = playlist.previews[index + 1];
-    client.message("/control/show", {prev, next, autoplay: playlist.autoplay});
-  }).catch(err => ({/* do nothing */}));
-}
+  client.message("/control/show", { prev, next, autoplay: playlist.autoplay });
+ }
