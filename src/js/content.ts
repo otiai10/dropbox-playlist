@@ -94,8 +94,8 @@ import * as chomex from "chomex";
   };
 
   const upsertControlBar = (prev, next, autoplay) => {
-    const exists = document.querySelector("div#control-bar");
-    if (exists) exists.remove();
+    const exists = document.querySelectorAll("div#control-bar");
+    if (exists) Array.from(exists).map(e => e.remove());
     updateAutoplayStatus(autoplay, next);
     const controlBar = createControlBar(prev, next, autoplay);
     const onWrapperRendered = setInterval(() => {
@@ -109,7 +109,7 @@ import * as chomex from "chomex";
   const router = new chomex.Router();
   router.on("/control/show", msg => {
     const {prev, next, autoplay} = msg;
-    upsertControlBar(prev, next, autoplay);
+    setTimeout(() => upsertControlBar(prev, next, autoplay), 100);
   });
   chrome.runtime.onMessage.addListener(router.listener());
 
