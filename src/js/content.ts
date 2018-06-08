@@ -21,15 +21,19 @@ import * as chomex from "chomex";
   };
 
   const updateAutoplayStatus = (autoplay, next) => {
-    const video = document.querySelector("video");
-    if (autoplay) {
-      video.onloadeddata = () => video.play();
-      video.onended = () => playNext(next);
-    } else {
-      video.onloadeddata = () => {/* do nothing */};
-      video.onended = () => {/* do nothing */};
-    }
-    client.message("/playlist/autoplay", {autoplay});
+    const onVideoRendered = setInterval(() => {
+      const video = document.querySelector("video");
+      if (!video) return;
+      clearInterval(onVideoRendered);
+      if (autoplay) {
+        video.onloadeddata = () => video.play();
+        video.onended = () => playNext(next);
+      } else {
+        video.onloadeddata = () => {/* do nothing */};
+        video.onended = () => {/* do nothing */};
+      }
+      client.message("/playlist/autoplay", {autoplay});
+    });
   };
 
   const createControlBar = (prev, next, autoplay): Node => {
@@ -37,19 +41,19 @@ import * as chomex from "chomex";
     bar.style.display = "flex";
     bar.id = "control-bar";
     // {{{ Left
+    const left = document.createElement("div");
+    left.style.flex = "1";
+    left.style.display = "flex";
+    left.style.justifyContent = "flex-start";
     if (prev) {
       const here = new URL(location.href);
-      const wrapper = document.createElement("div");
-      wrapper.style.flex = "1";
-      wrapper.style.display = "flex";
-      wrapper.style.justifyContent = "flex-start";
       here.searchParams.set("preview", prev);
       const a = document.createElement("a");
       a.addEventListener("click", () => moveTo(here.toString()));
       a.innerText = "← " + prev;
-      wrapper.appendChild(a);
-      bar.appendChild(wrapper);
+      left.appendChild(a);
     }
+    bar.appendChild(left);
     // }}}
     // {{{ Center
     const center = document.createElement("div");
@@ -71,20 +75,20 @@ import * as chomex from "chomex";
     bar.appendChild(center);
     // }}}
     // {{{ Right
+    const right = document.createElement("div");
+    right.style.flex = "1";
+    right.style.display = "flex";
+    right.style.justifyContent = "flex-end";
     if (next) {
       const here = new URL(location.href);
-      const wrapper = document.createElement("div");
-      wrapper.style.flex = "1";
-      wrapper.style.display = "flex";
-      wrapper.style.justifyContent = "flex-end";
       here.searchParams.set("preview", next);
       const a = document.createElement("a");
       a.addEventListener("click", () => moveTo(here.toString()));
       a.innerText = next + " →";
       a.style.cssFloat = "right";
-      wrapper.appendChild(a);
-      bar.appendChild(wrapper);
+      right.appendChild(a);
     }
+    bar.appendChild(right);
     // }}}
     return bar;
   };
@@ -94,7 +98,12 @@ import * as chomex from "chomex";
     if (exists) exists.remove();
     updateAutoplayStatus(autoplay, next);
     const controlBar = createControlBar(prev, next, autoplay);
-    document.querySelector("div.preview-video__wrapper").appendChild(controlBar);
+    const onWrapperRendered = setInterval(() => {
+      const wrapper = document.querySelector("div.preview-video__wrapper");
+      if (!wrapper) return;
+      clearInterval(onWrapperRendered);
+      wrapper.appendChild(controlBar);
+    });
   };
 
   const router = new chomex.Router();
