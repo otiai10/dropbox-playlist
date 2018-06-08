@@ -112,9 +112,10 @@ import * as chomex from "chomex";
         return e.querySelector("a.sl-link").getAttribute("href");
       });
       client.message("/playlist/register", {links}).then(res => {
-        console.log("OK", res);
+        window.alert(chrome.i18n.getMessage("dialog_registered", [res.data.count, res.data.id]));
+        btn.remove();
       }).catch(err => {
-        console.log("NG", err);
+        window.alert(chrome.i18n.getMessage("dialog_register_error", JSON.stringify(err)));
       });
     });
     const box = document.querySelector("div.sl-grid-header");

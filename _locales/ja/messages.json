@@ -10,5 +10,27 @@
   },
   "control_autoplay": {
     "message": "自動再生"
+  },
+  "dialog_registered": {
+    "message": "このページに含まれる$count$件のビデオを、プレイリストとして登録・保存しました。\n\n$id$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "128"
+      },
+      "id": {
+        "content": "$2",
+        "example": "www.dropbox.com/xxx/yyy"
+      }
+    }
+  },
+  "dialog_register_error": {
+    "message": "このページのプレイリスト登録を失敗しました。\n$reason$",
+    "placeholders": {
+      "reason": {
+        "content": "$1",
+        "example": "test"
+      }
+    }
   }
 }

@@ -38,7 +38,8 @@ export function RegisterPlaylist(msg) {
   const pl = Playlist.new({_id: id, previews});
   pl.save();
   return {
-    registered: true,
+    count: previews.length,
+    id,
   };
 }
 
