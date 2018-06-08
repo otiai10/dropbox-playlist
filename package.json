@@ -5,7 +5,7 @@
   "main": "dest/index.js",
   "scripts": {
     "start": "webpack --watch --progress",
-    "release": "NODE_ENV=production webpack --progress && rm -rf ./release && mkdir ./release && cp manifest.json ./release && cp -r dest ./release && cp -r ./_locales ./release",
+    "release": "NODE_ENV=production webpack --progress && rm -rf ./release ./release.zip && mkdir ./release && cp manifest.json ./release && cp -r dest ./release && cp -r ./_locales ./release && zip -r ./release.zip ./release/*",
     "test": "tslint ./src/**/*.ts && jest"
   },
   "repository": {
