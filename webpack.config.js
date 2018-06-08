@@ -1,12 +1,13 @@
 var path = require("path");
 
 module.exports = [
+  // TypeScript
   {
     mode: "development",
     devtool: "inline-sourcemap",
     entry: {
-      background: "./src/background.ts",
-      content: "./src/content.ts",
+      background: "./src/js/background.ts",
+      content: "./src/js/content.ts",
     },
     output: {
       path: path.resolve(__dirname, "dest/js"),

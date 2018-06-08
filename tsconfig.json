@@ -8,8 +8,8 @@
         "declaration": false
     },
     "files": [
-        "src/background.ts",
-        "src/content.ts"
+        "src/js/background.ts",
+        "src/js/content.ts"
     ],
     "exclude": [
         "node_modules"
