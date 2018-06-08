@@ -7,8 +7,8 @@
   "background": {
     "scripts": ["dest/js/background.js"]
   },
-  "prermissions": [
-    "https://www.dropbox.com",
+  "permissions": [
+    "https://www.dropbox.com/*",
     "tabs"
   ],
   "content_scripts": [

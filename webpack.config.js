@@ -3,8 +3,8 @@ var path = require("path");
 module.exports = [
   // TypeScript
   {
-    mode: "development",
-    devtool: "inline-sourcemap",
+    mode: process.env.NODE_ENV || "development",
+    devtool: false,
     entry: {
       background: "./src/js/background.ts",
       content: "./src/js/content.ts",
