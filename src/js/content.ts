@@ -3,40 +3,107 @@ import * as chomex from "chomex";
 
 (() => {
 
-  const createControlBar = (prev, next): Node => {
+  const client = new chomex.Client(chrome.runtime);
+
+  const playNext = (next: string) => {
+    const url = new URL(location.href);
+    url.searchParams.set("preview", next);
+    moveTo(url.toString());
+  };
+
+  const moveTo = (url) => {
+    history.pushState({}, "", url);
+    client.message("/playlist/control", {current: url}).then(({data}) => {
+      const {prev, next, autoplay} = data;
+      upsertControlBar(prev, next, autoplay);
+      updateAutoplayStatus(autoplay, next);
+    });
+  };
+
+  const updateAutoplayStatus = (autoplay, next) => {
+    const video = document.querySelector("video");
+    if (autoplay) {
+      video.onloadeddata = () => video.play();
+      video.onended = () => playNext(next);
+    } else {
+      video.onloadeddata = () => {/* do nothing */};
+      video.onended = () => {/* do nothing */};
+    }
+    client.message("/playlist/autoplay", {autoplay});
+  };
+
+  const createControlBar = (prev, next, autoplay): Node => {
     const bar = document.createElement("div");
+    bar.style.display = "flex";
     bar.id = "control-bar";
     const here = new URL(location.href);
+    // {{{ Left
     if (prev) {
+      const wrapper = document.createElement("div");
+      wrapper.style.flex = "1";
+      wrapper.style.display = "flex";
+      wrapper.style.justifyContent = "flex-start";
       here.searchParams.set("preview", prev);
       const a = document.createElement("a");
-      a.setAttribute("href", here.toString());
+      a.addEventListener("click", () => moveTo(here.toString()));
       a.innerText = "← " + prev;
-      a.style.cssFloat = "left";
-      bar.appendChild(a);
+      wrapper.appendChild(a);
+      bar.appendChild(wrapper);
     }
+    // }}}
+    // {{{ Center
+    const center = document.createElement("div");
+    center.style.flex = "1";
+    center.style.display = "flex";
+    center.style.justifyContent = "center";
+    const ap = document.createElement("label");
+    ap.style.cursor = "pointer";
+    const checkbox = document.createElement("input");
+    checkbox.setAttribute("type", "checkbox");
+    checkbox.addEventListener("change", (ev) => {
+      const checked = (ev.target as HTMLInputElement).checked;
+      updateAutoplayStatus(checked, next);
+    });
+    if (autoplay) checkbox.setAttribute("checked", "true");
+    ap.appendChild(checkbox);
+    ap.insertAdjacentText("beforeend", chrome.i18n.getMessage("control_autoplay"));
+    center.appendChild(ap);
+    bar.appendChild(center);
+    // }}}
+    // {{{ Right
     if (next) {
+      const wrapper = document.createElement("div");
+      wrapper.style.flex = "1";
+      wrapper.style.display = "flex";
+      wrapper.style.justifyContent = "flex-end";
       here.searchParams.set("preview", next);
       const a = document.createElement("a");
-      a.setAttribute("href", here.toString());
+      a.addEventListener("click", () => moveTo(here.toString()));
       a.innerText = next + " →";
       a.style.cssFloat = "right";
-      bar.appendChild(a);
+      wrapper.appendChild(a);
+      bar.appendChild(wrapper);
     }
+    // }}}
     return bar;
+  };
+
+  const upsertControlBar = (prev, next, autoplay) => {
+    const exists = document.querySelector("div#control-bar");
+    if (exists) exists.remove();
+    updateAutoplayStatus(autoplay, next);
+    const controlBar = createControlBar(prev, next, autoplay);
+    document.querySelector("div.preview-video__wrapper").appendChild(controlBar);
   };
 
   const router = new chomex.Router();
   router.on("/ping", () => ({url: location.href}));
   router.on("/control/show", msg => {
-    const {prev, next} = msg;
-    const controlBar = createControlBar(prev, next);
-    if (document.querySelector("div#control-bar")) return;
-    document.querySelector("div.preview-video__wrapper").appendChild(controlBar);
+    const {prev, next, autoplay} = msg;
+    upsertControlBar(prev, next, autoplay);
   });
   chrome.runtime.onMessage.addListener(router.listener());
 
-  const client = new chomex.Client(chrome.runtime);
   const init = () => {
     const btn = document.createElement("button");
     btn.innerText = chrome.i18n.getMessage("btn_create_playlist");
