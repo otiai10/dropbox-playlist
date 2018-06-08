@@ -36,9 +36,9 @@ import * as chomex from "chomex";
     const bar = document.createElement("div");
     bar.style.display = "flex";
     bar.id = "control-bar";
-    const here = new URL(location.href);
     // {{{ Left
     if (prev) {
+      const here = new URL(location.href);
       const wrapper = document.createElement("div");
       wrapper.style.flex = "1";
       wrapper.style.display = "flex";
@@ -72,6 +72,7 @@ import * as chomex from "chomex";
     // }}}
     // {{{ Right
     if (next) {
+      const here = new URL(location.href);
       const wrapper = document.createElement("div");
       wrapper.style.flex = "1";
       wrapper.style.display = "flex";
